@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -26,6 +27,7 @@ class UberState extends State<Uber> {
   final TextEditingController _startAdderessCtrl = TextEditingController();
   final TextEditingController _endAdderessCtrl = TextEditingController();
   final Set<Marker> _markers = Set();
+  final Map<PolylineId, Polyline> _polylines = {};
 
   GoogleMapController _mapCtrl;
   Position _currentPos;
@@ -49,6 +51,7 @@ class UberState extends State<Uber> {
               moveToCurrentLocation();
             },
             markers: _markers,
+            polylines: _polylines.values.toSet(),
           ),
           Align(
             alignment: Alignment.bottomRight,
@@ -107,9 +110,14 @@ class UberState extends State<Uber> {
                 buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
                 buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
                 RaisedButton(
-                  child: Text("Build route"),
+                  child: Text("Place markers"),
                   color: Colors.blue[200],
                   onPressed: () => placeMarkers(),
+                ),
+                RaisedButton(
+                  child: Text("Build Route"),
+                  color: Colors.blue[200],
+                  onPressed: () => buildPolylines(),
                 )
               ],
             ),
@@ -162,8 +170,8 @@ class UberState extends State<Uber> {
 
     setState(() {
       _markers.addAll([startMarker, destinationMarker]);
+      zoomCameraForMarkers();
     });
-    zoomCameraForMarkers();
   }
 
   void zoomCameraForMarkers() {
@@ -172,6 +180,25 @@ class UberState extends State<Uber> {
 
     final newBounds = LatLngBounds(northeast: LatLng(ne.latitude, ne.longitude), southwest: LatLng(sw.latitude, sw.longitude));
     _mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 80));
+  }
+
+  void buildPolylines() async {
+    final PolylinePoints polylinePoints = PolylinePoints();
+    final List<LatLng> polylineCoords = [];
+
+    final from = PointLatLng(_startPos.latitude, _startPos.longitude);
+    final to = PointLatLng(_endPos.latitude, _endPos.longitude);
+    final result = await polylinePoints.getRouteBetweenCoordinates("AIzaSyBeXMlR9K0vGo8glrh7XkQfIQikusOczcA", from, to, travelMode: TravelMode.driving);
+    print("Polylines result: ${result.status}; ${result.errorMessage}; points total: ${result.points.length}");
+    result.points.forEach((point) {
+      polylineCoords.add(LatLng(point.latitude, point.longitude));
+    });
+
+    final id = PolylineId("$_startPos");
+    final polyline = Polyline(polylineId: id, color: Colors.black87, points: polylineCoords, width: 4);
+    setState(() {
+      _polylines[id] = polyline;
+    });
   }
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {
