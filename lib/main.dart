@@ -33,6 +33,7 @@ class UberState extends State<Uber> {
   Position _currentPos;
   Position _startPos;
   Position _endPos;
+  String _distance = "Distance";
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +118,12 @@ class UberState extends State<Uber> {
                 RaisedButton(
                   child: Text("Build Route"),
                   color: Colors.blue[200],
-                  onPressed: () => buildPolylines(),
-                )
+                  onPressed: () {
+                    buildPolylines();
+                    totalDistance();
+                  },
+                ),
+                Text(_distance, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
               ],
             ),
           )
@@ -198,6 +203,18 @@ class UberState extends State<Uber> {
     final polyline = Polyline(polylineId: id, color: Colors.black87, points: polylineCoords, width: 4);
     setState(() {
       _polylines[id] = polyline;
+    });
+  }
+
+  void totalDistance() async {
+    final points = _polylines.values.first.points; // TODO dangerous
+    double total = 0.0;
+    for (int i=0; i < points.length - 1; ++i) {
+      total += await _geoLocator.distanceBetween(points[i].latitude, points[i].longitude, points[i+1].latitude, points[i+1].longitude);
+    }
+    total /= 1000; // m -> km
+    setState(() {
+      _distance = "Distance: ${total.toStringAsFixed(2)} km";
     });
   }
 
