@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:uber/mapmodel.dart';
+import 'package:uber/widgets/addresseditor.dart';
+import 'package:uber/widgets/mapwidget.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,49 +15,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Uber',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Uber(),
+      home: Uber(MapModel()),
     );
   }
 }
 
 class Uber extends StatefulWidget {
+  final MapModel model;
+  const Uber(this.model, {Key key}) : super(key: key);
+
   @override
-  State<Uber> createState() => UberState();
+  State<Uber> createState() => UberState(model);
 }
 
 class UberState extends State<Uber> {
+  final MapModel model;
   final _geoLocator = Geolocator();
-  final CameraPosition _initPos = CameraPosition(target: LatLng(59.9311, 30.3609), zoom: 15.4746);
+
   final TextEditingController _startAdderessCtrl = TextEditingController();
   final TextEditingController _endAdderessCtrl = TextEditingController();
-  final Set<Marker> _markers = Set();
-  final Map<PolylineId, Polyline> _polylines = {};
 
-  GoogleMapController _mapCtrl;
   Position _currentPos;
   Position _startPos;
   Position _endPos;
   String _distance = "Distance";
 
+  UberState(this.model);
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            initialCameraPosition: _initPos,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: false,
-            onMapCreated: (GoogleMapController controller) {
-              _mapCtrl = controller;
-              moveToCurrentLocation();
-            },
-            markers: _markers,
-            polylines: _polylines.values.toSet(),
-          ),
+    return ScopedModel<MapModel>(
+      model: model,
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+          MapWidget(),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -82,23 +78,23 @@ class UberState extends State<Uber> {
                       splashColor: Colors.blue,
                       child: SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
                       onTap: () {
-                        _mapCtrl.animateCamera(CameraUpdate.zoomIn());
+                        //_mapCtrl.animateCamera(CameraUpdate.zoomIn());
                       },
                     ),
                   )
                 ),
                 SizedBox(height: 10),
                 ClipOval(
-                  child: Material(
-                    color: Colors.blue[100],
-                    child: InkWell(
-                      splashColor: Colors.blue,
-                      child: SizedBox(width: 50, height: 50, child: Icon(Icons.remove)),
-                      onTap: () {
-                        _mapCtrl.animateCamera(CameraUpdate.zoomOut());
-                      },
-                    ),
-                  )
+                    child: Material(
+                      color: Colors.blue[100],
+                      child: InkWell(
+                        splashColor: Colors.blue,
+                        child: SizedBox(width: 50, height: 50, child: Icon(Icons.remove)),
+                        onTap: () {
+                          //_mapCtrl.animateCamera(CameraUpdate.zoomOut());
+                        },
+                      ),
+                    )
                 )
               ],
             ),
@@ -108,8 +104,10 @@ class UberState extends State<Uber> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
-                buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
+                //buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
+                //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
+                AddressEditor((coords) => model.addMarker(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
+                AddressEditor((coords) => model.addMarker(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
                 RaisedButton(
                   child: Text("Place markers"),
                   color: Colors.blue[200],
@@ -127,8 +125,9 @@ class UberState extends State<Uber> {
               ],
             ),
           )
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
   
@@ -137,7 +136,7 @@ class UberState extends State<Uber> {
     print(pos);
     _currentPos = pos;
     final position = CameraPosition(target: LatLng(pos.latitude, pos.longitude), zoom: 18);
-    _mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));
+    //_mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
   void findStartAddress() async {
@@ -174,7 +173,7 @@ class UberState extends State<Uber> {
     );
 
     setState(() {
-      _markers.addAll([startMarker, destinationMarker]);
+      //_markers.addAll([startMarker, destinationMarker]);
       zoomCameraForMarkers();
     });
   }
@@ -184,7 +183,7 @@ class UberState extends State<Uber> {
     final ne = _startPos.latitude <= _endPos.latitude ? _endPos : _startPos;
 
     final newBounds = LatLngBounds(northeast: LatLng(ne.latitude, ne.longitude), southwest: LatLng(sw.latitude, sw.longitude));
-    _mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 80));
+    //_mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 80));
   }
 
   void buildPolylines() async {
@@ -202,20 +201,20 @@ class UberState extends State<Uber> {
     final id = PolylineId("$_startPos");
     final polyline = Polyline(polylineId: id, color: Colors.black87, points: polylineCoords, width: 4);
     setState(() {
-      _polylines[id] = polyline;
+      //_polylines[id] = polyline;
     });
   }
 
   void totalDistance() async {
-    final points = _polylines.values.first.points; // TODO dangerous
-    double total = 0.0;
-    for (int i=0; i < points.length - 1; ++i) {
-      total += await _geoLocator.distanceBetween(points[i].latitude, points[i].longitude, points[i+1].latitude, points[i+1].longitude);
-    }
-    total /= 1000; // m -> km
-    setState(() {
-      _distance = "Distance: ${total.toStringAsFixed(2)} km";
-    });
+//    final points = _polylines.values.first.points; // TODO dangerous
+//    double total = 0.0;
+//    for (int i=0; i < points.length - 1; ++i) {
+//      total += await _geoLocator.distanceBetween(points[i].latitude, points[i].longitude, points[i+1].latitude, points[i+1].longitude);
+//    }
+//    total /= 1000; // m -> km
+//    setState(() {
+//      _distance = "Distance: ${total.toStringAsFixed(2)} km";
+//    });
   }
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {

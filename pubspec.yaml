@@ -19,10 +19,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.2
-  google_maps_flutter: ^0.5.28
   flutter_polyline_points: ^0.2.1
+  flutter_typeahead: ^1.8.3
+  scoped_model: ^1.0.1
+  tuple: ^1.0.3
+  google_maps_flutter: ^0.5.28
   geolocator: ^5.3.1
+  cupertino_icons: ^0.1.2
 
 dev_dependencies:
   flutter_test:
