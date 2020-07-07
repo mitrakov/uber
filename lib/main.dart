@@ -105,8 +105,8 @@ class UberState extends State<Uber> {
               children: <Widget>[
                 //buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
                 //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
-                AddressEditor((coords) => model.setStart(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
-                AddressEditor((coords) => model.setDestination(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
+                AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
+                AddressEditor((coords) => model.destination = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
                 RaisedButton(
                   child: Text("Place markers"),
                   color: Colors.blue[200],
@@ -116,7 +116,7 @@ class UberState extends State<Uber> {
                   child: Text("Build Route"),
                   color: Colors.blue[200],
                   onPressed: () {
-                    totalDistance();
+                    //totalDistance();
                   },
                 ),
                 Text(_distance, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
@@ -168,22 +168,6 @@ class UberState extends State<Uber> {
       //_markers.addAll([startMarker, destinationMarker]);
       //zoomCameraForMarkers();
     });
-  }
-
-
-
-
-
-  void totalDistance() async {
-//    final points = _polylines.values.first.points; // TODO dangerous
-//    double total = 0.0;
-//    for (int i=0; i < points.length - 1; ++i) {
-//      total += await _geoLocator.distanceBetween(points[i].latitude, points[i].longitude, points[i+1].latitude, points[i+1].longitude);
-//    }
-//    total /= 1000; // m -> km
-//    setState(() {
-//      _distance = "Distance: ${total.toStringAsFixed(2)} km";
-//    });
   }
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {
