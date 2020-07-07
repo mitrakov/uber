@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:uber/mapmodel.dart';
@@ -29,15 +28,6 @@ class Uber extends StatefulWidget {
 
 class UberState extends State<Uber> {
   final MapModel model;
-  final _geoLocator = Geolocator();
-
-  final TextEditingController _startAdderessCtrl = TextEditingController();
-  final TextEditingController _endAdderessCtrl = TextEditingController();
-
-  Position _currentPos;
-  Position _startPos;
-  Position _endPos;
-  String _distance = "Distance";
 
   UberState(this.model);
 
@@ -107,19 +97,7 @@ class UberState extends State<Uber> {
                 //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
                 AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
                 AddressEditor((coords) => model.destination = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
-                RaisedButton(
-                  child: Text("Place markers"),
-                  color: Colors.blue[200],
-                  onPressed: () => placeMarkers(),
-                ),
-                RaisedButton(
-                  child: Text("Build Route"),
-                  color: Colors.blue[200],
-                  onPressed: () {
-                    //totalDistance();
-                  },
-                ),
-                Text(_distance, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                Text("Distance: ${model.distance.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
               ],
             ),
           )
@@ -127,47 +105,6 @@ class UberState extends State<Uber> {
         ),
       )
     );
-  }
-  
-
-
-  void findStartAddress() async {
-    final List<Placemark> placemarks = await _geoLocator.placemarkFromPosition(_currentPos);
-    if (placemarks.isNotEmpty) {
-      final placemark = placemarks.first;
-      final addr = "${placemark.name}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}";
-      _startAdderessCtrl.text = addr;
-      _startPos = placemark.position;
-    }
-  }
-
-  void findDestinationAddress() async {
-    final List<Placemark> placemarks = await _geoLocator.placemarkFromAddress(_endAdderessCtrl.text);
-    if (placemarks.isNotEmpty) {
-      final placemark = placemarks.first;
-      print("${placemark.name}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}");
-      _endPos = placemark.position;
-    }
-  }
-
-  void placeMarkers() {
-    final startMarker = Marker(
-      markerId: MarkerId("$_startPos"),
-      position: LatLng(_startPos.latitude, _startPos.longitude),
-      infoWindow: InfoWindow(title: "Start", snippet: _startAdderessCtrl.text),
-      icon: BitmapDescriptor.defaultMarker,
-    );
-    final destinationMarker = Marker(
-      markerId: MarkerId("$_endPos"),
-      position: LatLng(_endPos.latitude, _endPos.longitude),
-      infoWindow: InfoWindow(title: "Destination", snippet: _endAdderessCtrl.text),
-      icon: BitmapDescriptor.defaultMarker,
-    );
-
-    setState(() {
-      //_markers.addAll([startMarker, destinationMarker]);
-      //zoomCameraForMarkers();
-    });
   }
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {
