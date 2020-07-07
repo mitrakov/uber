@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -60,7 +59,7 @@ class UberState extends State<Uber> {
                   child: InkWell(
                     splashColor: Colors.green,
                     child: SizedBox(width: 56, height: 56, child: Icon(Icons.my_location)),
-                    onTap: () => moveToCurrentLocation(),
+                    onTap: () => print(""),
                   ),
                 )
               ),
@@ -106,8 +105,8 @@ class UberState extends State<Uber> {
               children: <Widget>[
                 //buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
                 //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
-                AddressEditor((coords) => model.addMarker(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
-                AddressEditor((coords) => model.addMarker(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
+                AddressEditor((coords) => model.setStart(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
+                AddressEditor((coords) => model.setDestination(Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()))),
                 RaisedButton(
                   child: Text("Place markers"),
                   color: Colors.blue[200],
@@ -117,7 +116,6 @@ class UberState extends State<Uber> {
                   child: Text("Build Route"),
                   color: Colors.blue[200],
                   onPressed: () {
-                    buildPolylines();
                     totalDistance();
                   },
                 ),
@@ -131,13 +129,7 @@ class UberState extends State<Uber> {
     );
   }
   
-  void moveToCurrentLocation() async {
-    final Position pos = await _geoLocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(pos);
-    _currentPos = pos;
-    final position = CameraPosition(target: LatLng(pos.latitude, pos.longitude), zoom: 18);
-    //_mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));
-  }
+
 
   void findStartAddress() async {
     final List<Placemark> placemarks = await _geoLocator.placemarkFromPosition(_currentPos);
@@ -174,36 +166,13 @@ class UberState extends State<Uber> {
 
     setState(() {
       //_markers.addAll([startMarker, destinationMarker]);
-      zoomCameraForMarkers();
+      //zoomCameraForMarkers();
     });
   }
 
-  void zoomCameraForMarkers() {
-    final sw = _startPos.latitude <= _endPos.latitude ? _startPos : _endPos;
-    final ne = _startPos.latitude <= _endPos.latitude ? _endPos : _startPos;
 
-    final newBounds = LatLngBounds(northeast: LatLng(ne.latitude, ne.longitude), southwest: LatLng(sw.latitude, sw.longitude));
-    //_mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 80));
-  }
 
-  void buildPolylines() async {
-    final PolylinePoints polylinePoints = PolylinePoints();
-    final List<LatLng> polylineCoords = [];
 
-    final from = PointLatLng(_startPos.latitude, _startPos.longitude);
-    final to = PointLatLng(_endPos.latitude, _endPos.longitude);
-    final result = await polylinePoints.getRouteBetweenCoordinates("AIzaSyBeXMlR9K0vGo8glrh7XkQfIQikusOczcA", from, to, travelMode: TravelMode.driving);
-    print("Polylines result: ${result.status}; ${result.errorMessage}; points total: ${result.points.length}");
-    result.points.forEach((point) {
-      polylineCoords.add(LatLng(point.latitude, point.longitude));
-    });
-
-    final id = PolylineId("$_startPos");
-    final polyline = Polyline(polylineId: id, color: Colors.black87, points: polylineCoords, width: 4);
-    setState(() {
-      //_polylines[id] = polyline;
-    });
-  }
 
   void totalDistance() async {
 //    final points = _polylines.values.first.points; // TODO dangerous

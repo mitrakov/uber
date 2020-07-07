@@ -1,32 +1,38 @@
-import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class MapModel extends Model {
-  final Set<Marker> markers = Set();
-  final Set<Polyline> polylines = Set();
+  Marker start;
+  Marker destination;
 
-  void addMarker(Marker marker) {
-    markers.add(marker);
+  Set<Marker> get markers {
+    final Set<Marker> result = Set();
+    if (start != null) result.add(start);
+    if (destination != null) result.add(destination);
+
+    return result;
+  }
+
+  void setStart(Marker marker) {
+    start = marker;
     notifyListeners();
   }
 
-  void setPolylines(Iterable<Polyline> lines) {
-    polylines.clear();
-    polylines.addAll(lines);
+  void setDestination(Marker marker) {
+    destination = marker;
     notifyListeners();
   }
 
   @override
   String toString() {
-    return 'MapModel{markers: $markers, polylines: $polylines}';
+    return 'MapModel{start: $start, destination: $destination}';
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MapModel && runtimeType == other.runtimeType && setEquals(markers, other.markers) && setEquals(polylines, other.polylines);
+      other is MapModel && runtimeType == other.runtimeType && start == other.start && destination == other.destination;
 
   @override
-  int get hashCode => markers.hashCode ^ polylines.hashCode;
+  int get hashCode => start.hashCode ^ destination.hashCode;
 }
