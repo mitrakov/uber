@@ -42,70 +42,90 @@ class UberState extends State<Uber> {
         body: Stack(
           children: <Widget>[
           MapWidget(coordsToStr),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 5, top: 20),
+              child: IconButton(icon: Icon(Icons.menu, size: 28), onPressed: () => print("Show menu stub")),
+            ),
+          ),
           Center(
-            child: Icon(Icons.location_on, size: 48),
+            child: Icon(Icons.arrow_drop_down_circle, size: 48),
           ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.only(right: 10, bottom: 10),
+              padding: const EdgeInsets.only(right: 10, bottom: 160),
               child: ClipOval(
                 child: Material(
-                  color: Colors.lightGreen,
+                  color: Colors.white,
                   child: InkWell(
-                    splashColor: Colors.green,
-                    child: SizedBox(width: 56, height: 56, child: Icon(Icons.my_location)),
+                    splashColor: Colors.white,
+                    child: SizedBox(width: 32, height: 32, child: Icon(Icons.near_me, size: 22)),
                     onTap: () => print(""),
                   ),
                 )
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ClipOval(
-                  child: Material(
-                    color: Colors.blue[100],
-                    child: InkWell(
-                      splashColor: Colors.blue,
-                      child: SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
-                      onTap: () {
-                        //_mapCtrl.animateCamera(CameraUpdate.zoomIn());
-                      },
-                    ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 70, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ClipOval(
+                      child: Material(
+                        color: Colors.white,
+                        child: InkWell(
+                          splashColor: Colors.white,
+                          child: SizedBox(width: 57, height: 57, child: Icon(Icons.access_time, size: 27)),
+                          onTap: () {
+                            //_mapCtrl.animateCamera(CameraUpdate.zoomIn());
+                          },
+                        ),
+                      )
+                  ),
+                  ClipOval(
+                      child: Material(
+                        color: Colors.white,
+                        child: InkWell(
+                          splashColor: Colors.white,
+                          child: SizedBox(width: 57, height: 57, child: Icon(Icons.access_time, size: 27)),
+                          onTap: () {
+                            //_mapCtrl.animateCamera(CameraUpdate.zoomOut());
+                          },
+                        ),
+                      )
+                  ),
+                  ClipOval(
+                      child: Material(
+                        color: Colors.white,
+                        child: InkWell(
+                          splashColor: Colors.white,
+                          child: SizedBox(width: 57, height: 57, child: Icon(Icons.access_time, size: 27)),
+                          onTap: () {
+                            //_mapCtrl.animateCamera(CameraUpdate.zoomOut());
+                          },
+                        ),
+                      )
                   )
-                ),
-                SizedBox(height: 10),
-                ClipOval(
-                    child: Material(
-                      color: Colors.blue[100],
-                      child: InkWell(
-                        splashColor: Colors.blue,
-                        child: SizedBox(width: 50, height: 50, child: Icon(Icons.remove)),
-                        onTap: () {
-                          //_mapCtrl.animateCamera(CameraUpdate.zoomOut());
-                        },
-                      ),
-                    )
-                )
-              ],
+                ],
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                //buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
-                //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
-                AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()), controller: _startCtrl),
-                AddressEditor((coords) => model.destination = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
-                Text("Distance: ${model.distance.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-              ],
-            ),
+            padding: const EdgeInsets.only(left: 22, top: 100, right: 22),
+//            child: Column(
+//              mainAxisAlignment: MainAxisAlignment.start,
+//              children: <Widget>[
+//                AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()), controller: _startCtrl),
+//                AddressEditor((coords) => model.destination = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
+//                Text("Distance: ${model.distance.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+//              ],
+//            ),
+            child: buildTextField(controller: TextEditingController(text: "Where to?"), label: "From: Strelbishchenskaya ulitsa, 29", hint: "Strelbyshchenskaya", initValue: "Strelbyshchenskaya", prefixIcon: Icon(Icons.stop, size: 12, color: Colors.black)),
           )
           ],
         ),
@@ -123,25 +143,23 @@ class UberState extends State<Uber> {
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {
     return Container(
-      padding: EdgeInsets.only(top: 5, bottom: 5),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(0.3), spreadRadius: 2, blurRadius: 15, offset: Offset(0, 7)),
+        ]
+      ),
       child: TextField(
         controller: controller,
         onChanged: (value) => callback(value),
+        style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
-          prefixIcon: prefixIcon,
+          prefixIcon: Padding(padding: EdgeInsets.only(top: 17), child: prefixIcon),
           suffixIcon: suffixIcon,
           labelText: label,
           filled: true,
-          fillColor: Colors.white70,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.grey[400], width: 2),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.blue[300], width: 2),
-          ),
-          contentPadding: EdgeInsets.all(15),
+          fillColor: Colors.white,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(10),
           hintText: hint,
         ),
       ),
