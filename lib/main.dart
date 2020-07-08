@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:uber/coordinates.dart';
 import 'package:uber/mapmodel.dart';
 import 'package:uber/widgets/addresseditor.dart';
 import 'package:uber/widgets/mapwidget.dart';
@@ -28,6 +30,7 @@ class Uber extends StatefulWidget {
 
 class UberState extends State<Uber> {
   final MapModel model;
+  final _startCtrl = TextEditingController();
 
   UberState(this.model);
 
@@ -38,7 +41,10 @@ class UberState extends State<Uber> {
       child: Scaffold(
         body: Stack(
           children: <Widget>[
-          MapWidget(),
+          MapWidget(coordsToStr),
+          Center(
+            child: Icon(Icons.location_on, size: 48),
+          ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -95,7 +101,7 @@ class UberState extends State<Uber> {
               children: <Widget>[
                 //buildTextField(controller: _startAdderessCtrl, label: "Start", hint: "Start address", prefixIcon: Icon(Icons.looks_one), callback: (s) => findStartAddress()),
                 //buildTextField(controller: _endAdderessCtrl, label: "Destination", hint: "Destination address", prefixIcon: Icon(Icons.looks_two), callback: (s) => findDestinationAddress()),
-                AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
+                AddressEditor((coords) => model.start = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng()), controller: _startCtrl),
                 AddressEditor((coords) => model.destination = Marker(markerId: MarkerId("$coords"), position: coords.toLatLng())),
                 Text("Distance: ${model.distance.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
               ],
@@ -105,6 +111,14 @@ class UberState extends State<Uber> {
         ),
       )
     );
+  }
+
+  void coordsToStr(Coordinates coords) async {
+    List<Placemark> marks = await model.geoLocator.placemarkFromPosition(coords.toPosition());
+    if (marks.isNotEmpty) {
+      Placemark mark = marks.first;
+      _startCtrl.text = "${mark.name}; ${mark.locality}; ${mark.postalCode}; ${mark.country}";
+    }
   }
 
   Widget buildTextField({TextEditingController controller, String label, String hint, String initValue, Widget prefixIcon, Widget suffixIcon, Function(String) callback}) {

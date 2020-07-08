@@ -11,7 +11,7 @@ class MapModel extends Model {
   Marker _start;
   Marker _destination;
   Polyline _polyline;
-  double _distance;
+  double _distance = 0;
 
   Marker get start => _start;
   Marker get destination => _destination;

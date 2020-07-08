@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,13 +7,18 @@ import 'package:uber/coordinates.dart';
 import 'package:uber/mapmodel.dart';
 
 class MapWidget extends StatefulWidget {
+  final ValueChanged<Coordinates> onNewPosition;
+  const MapWidget(this.onNewPosition, {Key key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => MapWidgetState();
+  State<StatefulWidget> createState() => MapWidgetState(onNewPosition);
 }
 
 class MapWidgetState extends State<MapWidget> {
+  final ValueChanged<Coordinates> onNewPosition;
   final _initPos = CameraPosition(target: LatLng(59.9311, 30.3609), zoom: 15.4746);
   GoogleMapController _mapCtrl;
+
+  MapWidgetState(this.onNewPosition);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +30,9 @@ class MapWidgetState extends State<MapWidget> {
           initialCameraPosition: _initPos,
           myLocationEnabled: true,
           myLocationButtonEnabled: false,
+          onCameraMove: (position) {
+            EasyDebounce.debounce("camera", Duration(milliseconds: 500), () => onNewPosition(Coordinates.fromLatLng(position.target)));
+          },
           mapType: MapType.normal,
           zoomGesturesEnabled: true,
           zoomControlsEnabled: false,

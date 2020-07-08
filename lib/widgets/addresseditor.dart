@@ -6,10 +6,10 @@ import 'package:uber/coordinates.dart';
 
 class AddressEditor extends StatelessWidget {
   final _geoLocator = Geolocator();
-  final _ctrl = TextEditingController();
+  final _ctrl;
   final ValueChanged<Coordinates> callback;
 
-  AddressEditor(this.callback, {Key key}) : super(key: key);
+  AddressEditor(this.callback, {Key key, TextEditingController controller}) : _ctrl = controller ?? TextEditingController(), super(key: key);
 
   @override
   Widget build(BuildContext context) {

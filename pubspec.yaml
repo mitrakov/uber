@@ -26,6 +26,7 @@ dependencies:
   google_maps_flutter: ^0.5.28
   geolocator: ^5.3.1
   cupertino_icons: ^0.1.2
+  easy_debounce: ^1.0.1
 
 dev_dependencies:
   flutter_test:
