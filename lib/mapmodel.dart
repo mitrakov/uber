@@ -13,6 +13,16 @@ class MapModel extends Model {
   Polyline _polyline;
   double _distance = 0;
 
+  // coords
+  Coordinates _startCoords;
+  Coordinates get startCoords => _startCoords;
+
+  set startCoords(Coordinates value) {
+    _startCoords = value;
+    notifyListeners();
+  }
+
+
   Marker get start => _start;
   Marker get destination => _destination;
   double get distance => _distance;
