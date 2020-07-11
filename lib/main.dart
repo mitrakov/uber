@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _model.init();
     return ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(

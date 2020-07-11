@@ -11,7 +11,7 @@ class AddressEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: (text) {
-        EasyDebounce.debounce("addr-editor", Duration(milliseconds: 1000), () => onChanged(text));
+        EasyDebounce.debounce("addr-editor", Duration(milliseconds: 500), () => onChanged(text));
       },
       decoration: InputDecoration(
         labelText: label,

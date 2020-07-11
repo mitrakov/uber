@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uber/address.dart';
 import 'package:uber/coordinates.dart';
 import 'package:uber/locator.dart';
 
 class MapModel extends Model {
   // model data
+  SharedPreferences _storage;
   Coordinates _start;
   Coordinates _destination;
   Marker _startMarker;
@@ -41,7 +43,7 @@ class MapModel extends Model {
         .whenComplete(notifyListeners);
   }
 
-  // public getters
+  // other getters
   double get distance => _distance;
   Set<Polyline> get polylines => _polyline != null ? Set.of([_polyline]) : null;
   Set<Marker> get markers {
@@ -52,10 +54,20 @@ class MapModel extends Model {
     return result;
   }
 
+  List<Address> getRecentAddresses() {
+    if (_storage.containsKey("recentAddresses"))
+      return _storage.getStringList("recentAddresses").map((s) => Address.fromStorageString(s)).toList();
+    return [];
+  }
 
   @override
   String toString() {
-    return 'MapModel{_startAddress: $_startAddress, _destinationAddress: $_destinationAddress, _start: $_start, _destination: $_destination, _startMarker: $_startMarker, _destinationMarker: $_destinationMarker, _polyline: $_polyline, _distance: $_distance}';
+    return 'MapModel{_startAddress: $_startAddress, _destinationAddress: $_destinationAddress, _start: $_start, _destination: $_destination, _startMarker: ${_startMarker?.markerId}, _destinationMarker: ${_destinationMarker?.markerId}, _polyline: $_polyline, _distance: $_distance}';
+  }
+
+  void init() async {
+    if (_storage == null)
+      _storage = await SharedPreferences.getInstance();
   }
 
   Future<void> _updateModel(Coordinates c1, Coordinates c2) async {
@@ -64,8 +76,10 @@ class MapModel extends Model {
     }
     if (c2 != null) {
       _destinationAddress = await Locator.toAddress(c2);
+      _addRecentAddress(_destinationAddress);
     }
     if (c1 != null && c2 != null) {
+      _predictAddress = null;
       _startMarker = _createMarker(c1);
       _destinationMarker = _createMarker(c2);
       _polyline = await _buildPolyline(c1, c2);
@@ -94,5 +108,14 @@ class MapModel extends Model {
       total += await Locator.distanceBetween(Coordinates.fromLatLng(points[i]), Coordinates.fromLatLng(points[i+1]));
     }
     return total / 1000; // m -> km
+  }
+
+  void _addRecentAddress(Address address) {
+    final recentAddresses = getRecentAddresses();
+    if (!recentAddresses.contains(address)) {
+      recentAddresses.insert(0, address);
+      final newList = recentAddresses.take(7).map((a) => a.toStorageString()).toList();
+      _storage.setStringList("recentAddresses", newList);
+    }
   }
 }

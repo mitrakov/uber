@@ -15,7 +15,7 @@ class AddressHeader extends StatelessWidget {
                 Text(model.startAddress?.toShortString() ?? "From"),
                 ListTile(
                   leading: Icon(Icons.stop),
-                  title: Text(model.destinationAddress.toShortString() ?? "Where to?"),
+                  title: Text(model.destinationAddress?.toShortString() ?? "Where to?"),
                 ),
               ],
             ),
