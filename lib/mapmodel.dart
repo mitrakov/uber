@@ -14,6 +14,7 @@ class MapModel extends Model {
   Marker _destinationMarker;
   Address _startAddress;
   Address _destinationAddress;
+  Address _predictAddress;
   Polyline _polyline;
   double _distance = 0;
 
@@ -22,22 +23,25 @@ class MapModel extends Model {
   Coordinates get destination => _destination;
   set start(Coordinates value) {
     _start = value;
-    _updateModel(_start, _destination).whenComplete(() => notifyListeners());
+    _updateModel(_start, _destination).whenComplete(notifyListeners);
   }
   set destination(Coordinates value) {
     _destination = value;
-    _updateModel(_start, _destination).whenComplete(() => notifyListeners());
+    _updateModel(_start, _destination).whenComplete(notifyListeners);
   }
-  set startAddress(Address value) {
-    Locator.fromAddress(value.addr).then((coords) => start = coords);
-  }
-  set destinationAddress(Address value) {
-    Locator.fromAddress(value.addr).then((coords) => destination = coords);
+
+  // address getters/setters
+  Address get startAddress => _startAddress;
+  Address get destinationAddress => _destinationAddress;
+  Address get predictAddress => _predictAddress;
+  set predictAddress(Address value) {
+    Locator.fromAddress(value.addr)
+        .then(Locator.toAddress)
+        .then((fullAddr) => _predictAddress = fullAddr)
+        .whenComplete(notifyListeners);
   }
 
   // public getters
-  Address get startAddress => _startAddress;
-  Address get destinationAddress => _destinationAddress;
   double get distance => _distance;
   Set<Polyline> get polylines => _polyline != null ? Set.of([_polyline]) : null;
   Set<Marker> get markers {

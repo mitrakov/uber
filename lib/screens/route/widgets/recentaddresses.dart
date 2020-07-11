@@ -1,28 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:uber/address.dart';
+import 'package:uber/locator.dart';
+import 'package:uber/mapmodel.dart';
 
 class RecentAddresses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Address>>(
-      future: getAddresses(),
-      initialData: [],
-      builder: (context1, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context2, i) {
-              return ListTile(
-                leading: Icon(Icons.schedule),
-                title: Text(snapshot.data[i].addr),
-                subtitle: Text(snapshot.data[i].city),
+    return ScopedModelDescendant<MapModel>(
+      builder: (context1, child, model) {
+        return FutureBuilder<List<Address>>(
+          future: getAddresses(),
+          initialData: [],
+          builder: (context2, snapshot) {
+            if (snapshot.hasData) {
+              final data = List<Address>.from(snapshot.data);
+              if (model.predictAddress != null)
+                data.insert(0, model.predictAddress);
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context3, i) {
+                  return ListTile(
+                    leading: Icon(Icons.schedule),
+                    title: Text(data[i].addr),
+                    subtitle: Text(data[i].city),
+                    onTap: () async {
+                      model.destination = await Locator.fromAddress(data[i].toShortString());
+                      Navigator.of(context3).pop();
+                    },
+                  );
+                },
               );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error);
-        } else return CircularProgressIndicator();
-      },
+            }
+            return CircularProgressIndicator();
+          },
+        );
+      }
     );
   }
 

@@ -12,10 +12,10 @@ class AddressHeader extends StatelessWidget {
             height: 75,
             child: Column(
               children: <Widget>[
-                Text(model.startAddress?.toShortString() ?? ""),
+                Text(model.startAddress?.toShortString() ?? "From"),
                 ListTile(
                   leading: Icon(Icons.stop),
-                  title: Text("Where to?"),
+                  title: Text(model.destinationAddress.toShortString() ?? "Where to?"),
                 ),
               ],
             ),

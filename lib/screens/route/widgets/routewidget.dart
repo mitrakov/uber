@@ -17,7 +17,7 @@ class RouteWidget extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   AddressEditor(model.startAddress?.toShortString(), (addr) {}),
-                  AddressEditor("Where to?", (addr) => model.destinationAddress = Address.predict(addr)),
+                  AddressEditor("Where to?", (addr) => model.predictAddress = Address.predict(addr)),
                 ],
               )
             ),
