@@ -18,6 +18,18 @@ class Locator {
     }
   }
 
+  static Future<Coordinates> fromAddress(String address) async {
+    try {
+      final List<Placemark> list = await locator.placemarkFromAddress(address, localeIdentifier: "ru_RU");
+      if (list.isNotEmpty) {
+        return Coordinates.fromPosition(list.first.position);
+      }
+      return Coordinates.fallback();
+    } catch (e) {
+      return Coordinates.fallback();
+    }
+  }
+
   static Future<double> distanceBetween(Coordinates c1, Coordinates c2) {
     return locator.distanceBetween(c1.latitude, c1.longitude, c2.latitude, c2.longitude);
   }

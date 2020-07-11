@@ -28,6 +28,12 @@ class MapModel extends Model {
     _destination = value;
     _updateModel(_start, _destination).whenComplete(() => notifyListeners());
   }
+  set startAddress(Address value) {
+    Locator.fromAddress(value.addr).then((coords) => start = coords);
+  }
+  set destinationAddress(Address value) {
+    Locator.fromAddress(value.addr).then((coords) => destination = coords);
+  }
 
   // public getters
   Address get startAddress => _startAddress;
@@ -42,21 +48,22 @@ class MapModel extends Model {
     return result;
   }
 
+
   @override
   String toString() {
-    return 'MapModel{_start: $_start, _destination: $_destination, _startMarker: $_startMarker, _destinationMarker: $_destinationMarker, _polyline: $_polyline, _distance: $_distance}';
+    return 'MapModel{_startAddress: $_startAddress, _destinationAddress: $_destinationAddress, _start: $_start, _destination: $_destination, _startMarker: $_startMarker, _destinationMarker: $_destinationMarker, _polyline: $_polyline, _distance: $_distance}';
   }
 
   Future<void> _updateModel(Coordinates c1, Coordinates c2) async {
     if (c1 != null) {
-      _startMarker = _createMarker(c1);
       _startAddress = await Locator.toAddress(c1);
     }
     if (c2 != null) {
-      _destinationMarker = _createMarker(c2);
       _destinationAddress = await Locator.toAddress(c2);
     }
     if (c1 != null && c2 != null) {
+      _startMarker = _createMarker(c1);
+      _destinationMarker = _createMarker(c2);
       _polyline = await _buildPolyline(c1, c2);
       _distance = await _calcDistance(_polyline.points);
     }

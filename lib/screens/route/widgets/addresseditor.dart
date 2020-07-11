@@ -1,21 +1,26 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 
 class AddressEditor extends StatelessWidget {
-  final String hint;
+  final String label;
+  final ValueChanged<String> onChanged;
 
-  const AddressEditor(this.hint, {Key key}) : super(key: key);
+  AddressEditor(this.label, this.onChanged, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: (text) {
+        EasyDebounce.debounce("addr-editor", Duration(milliseconds: 1000), () => onChanged(text));
+      },
       decoration: InputDecoration(
-        labelText: "Aaaa",
+        labelText: label,
         filled: true,
         fillColor: Colors.white,
         border: InputBorder.none,
         contentPadding: EdgeInsets.all(10),
-        hintText: hint,
+        hintText: "Search address",
       ),
-    );
+    );;
   }
 }

@@ -8,6 +8,7 @@ class Coordinates {
 
   Coordinates(this.latitude, this.longitude);
 
+  factory Coordinates.fallback() => Coordinates(59.9311, 30.3609);
   factory Coordinates.fromLatLng(LatLng coords) => Coordinates(coords.latitude, coords.longitude);
   factory Coordinates.fromPoint(PointLatLng coords) => Coordinates(coords.latitude, coords.longitude);
   factory Coordinates.fromPosition(Position coords) => Coordinates(coords.latitude, coords.longitude);

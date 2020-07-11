@@ -15,7 +15,7 @@ class MapWidget extends StatefulWidget {
 
 class MapWidgetState extends State<MapWidget> {
   final ValueChanged<Coordinates> onNewPosition;
-  final _initPos = CameraPosition(target: LatLng(59.9311, 30.3609), zoom: 15.4746);
+  final _initPos = CameraPosition(target: Coordinates.fallback().toLatLng(), zoom: 15.4746);
   GoogleMapController _mapCtrl;
 
   MapWidgetState(this.onNewPosition);

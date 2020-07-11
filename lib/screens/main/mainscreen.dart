@@ -5,16 +5,19 @@ import 'package:uber/screens/main/widgets/mapwidget.dart';
 import 'package:uber/screens/main/widgets/mostrecent.dart';
 
 class MainScreen extends StatelessWidget {
-  final MapModel mapModel;
+  final MapModel model;
 
-  const MainScreen(this.mapModel, {Key key}) : super(key: key);
+  const MainScreen(this.model, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          MapWidget((coords) => mapModel.start = coords),
+          MapWidget((coords) {
+            if (model.destination == null) // if destination is null, camera move will set start position
+              model.start = coords;
+          }),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(

@@ -4,6 +4,7 @@ class Address {
   final String country;
 
   Address(this.addr, this.city, this.country);
+  Address.predict(this.addr) : this.city = "", this.country = "";
 
   String toShortString() => '$addr';
 
