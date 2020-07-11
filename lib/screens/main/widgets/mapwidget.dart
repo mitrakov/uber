@@ -1,9 +1,9 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:uber/coordinates.dart';
+import 'package:uber/locator.dart';
 import 'package:uber/mapmodel.dart';
 
 class MapWidget extends StatefulWidget {
@@ -50,15 +50,13 @@ class MapWidgetState extends State<MapWidget> {
   void checkModel(MapModel model) {
     if (model.start != null) {
       if (model.destination != null) {
-        final c1 = Coordinates.fromLatLng(model.start.position);
-        final c2 = Coordinates.fromLatLng(model.destination.position);
-        zoomCameraToAccommodateCoords(c1, c2);
-      } else moveToCoords(Coordinates.fromLatLng(model.start.position));
+        zoomCameraToAccommodateCoords(model.start, model.destination);
+      } else moveToCoords(model.start);
     }
   }
 
   void moveToCurrentLocation(MapModel model) async {
-    final Coordinates coords = Coordinates.fromPosition(await model.geoLocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
+    final Coordinates coords = await Locator.getCurrentPosition();
     print(coords);
     final position = CameraPosition(target: coords.toLatLng(), zoom: 18);
     _mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));

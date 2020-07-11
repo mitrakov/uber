@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          MapWidget((coords) => mapModel.startCoords = coords),
+          MapWidget((coords) => mapModel.start = coords),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(

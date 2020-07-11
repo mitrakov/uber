@@ -6,7 +6,6 @@ class Locator {
   static final Geolocator locator = Geolocator();
 
   static Future<Address> toAddress(Coordinates coords) async {
-    print("Hey");
     try {
       final List<Placemark> list = await locator.placemarkFromPosition(coords.toPosition());
       if (list.isNotEmpty) {
@@ -17,5 +16,14 @@ class Locator {
     } catch (e) {
       return Address("", "", ""); // TODO Option
     }
+  }
+
+  static Future<double> distanceBetween(Coordinates c1, Coordinates c2) {
+    return locator.distanceBetween(c1.latitude, c1.longitude, c2.latitude, c2.longitude);
+  }
+
+  static Future<Coordinates> getCurrentPosition() async {
+    Position p = await locator.getCurrentPosition();
+    return Coordinates.fromPosition(p);
   }
 }

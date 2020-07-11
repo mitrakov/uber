@@ -1,75 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:uber/address.dart';
 import 'package:uber/coordinates.dart';
+import 'package:uber/locator.dart';
 
 class MapModel extends Model {
-  final geoLocator = Geolocator();
-
-  Marker _start;
-  Marker _destination;
+  // model data
+  Coordinates _start;
+  Coordinates _destination;
+  Marker _startMarker;
+  Marker _destinationMarker;
+  Address _startAddress;
+  Address _destinationAddress;
   Polyline _polyline;
   double _distance = 0;
 
-  // coords
-  Coordinates _startCoords;
-  Coordinates get startCoords => _startCoords;
-
-  set startCoords(Coordinates value) {
-    _startCoords = value;
-    notifyListeners();
+  // coords getters/setters
+  Coordinates get start => _start;
+  Coordinates get destination => _destination;
+  set start(Coordinates value) {
+    _start = value;
+    _updateModel(_start, _destination).whenComplete(() => notifyListeners());
+  }
+  set destination(Coordinates value) {
+    _destination = value;
+    _updateModel(_start, _destination).whenComplete(() => notifyListeners());
   }
 
-
-  Marker get start => _start;
-  Marker get destination => _destination;
+  // public getters
+  Address get startAddress => _startAddress;
+  Address get destinationAddress => _destinationAddress;
   double get distance => _distance;
   Set<Polyline> get polylines => _polyline != null ? Set.of([_polyline]) : null;
   Set<Marker> get markers {
     final Set<Marker> result = Set();
-    if (_start != null) result.add(_start);
-    if (_destination != null) result.add(_destination);
+    if (_startMarker != null) result.add(_startMarker);
+    if (_destinationMarker != null) result.add(_destinationMarker);
 
     return result;
   }
 
-  set start(Marker marker) {
-    _start = marker;
-    if (_destination != null)
-      _buildPolylines(Coordinates.fromLatLng(_start.position), Coordinates.fromLatLng(_destination.position));
-    else notifyListeners();
+  @override
+  String toString() {
+    return 'MapModel{_start: $_start, _destination: $_destination, _startMarker: $_startMarker, _destinationMarker: $_destinationMarker, _polyline: $_polyline, _distance: $_distance}';
   }
 
-  set destination(Marker marker) {
-    _destination = marker;
-    if (_start != null)
-      _buildPolylines(Coordinates.fromLatLng(_start.position), Coordinates.fromLatLng(_destination.position));
-    else notifyListeners();
+  Future<void> _updateModel(Coordinates c1, Coordinates c2) async {
+    if (c1 != null) {
+      _startMarker = _createMarker(c1);
+      _startAddress = await Locator.toAddress(c1);
+    }
+    if (c2 != null) {
+      _destinationMarker = _createMarker(c2);
+      _destinationAddress = await Locator.toAddress(c2);
+    }
+    if (c1 != null && c2 != null) {
+      _polyline = await _buildPolyline(c1, c2);
+      _distance = await _calcDistance(_polyline.points);
+    }
   }
 
-  void _buildPolylines(Coordinates c1, Coordinates c2) async {
+  Marker _createMarker(Coordinates c) => Marker(markerId: MarkerId("$c"), position: c.toLatLng());
+
+  Future<Polyline> _buildPolyline(Coordinates c1, Coordinates c2) async {
     final PolylinePoints polylinePoints = PolylinePoints();
     final List<LatLng> points = [];
-    double total = 0.0;
 
     final result = await polylinePoints.getRouteBetweenCoordinates("AIzaSyBeXMlR9K0vGo8glrh7XkQfIQikusOczcA", c1.toPoint(), c2.toPoint(), travelMode: TravelMode.driving);
     print("Polylines result: ${result.status}; ${result.errorMessage}; points total: ${result.points.length}");
     result.points.forEach((point) {
       points.add(Coordinates.fromPoint(point).toLatLng());
     });
-    for (int i=0; i < points.length - 1; ++i) {
-      total += await geoLocator.distanceBetween(points[i].latitude, points[i].longitude, points[i+1].latitude, points[i+1].longitude);
-    }
 
-    _polyline = Polyline(polylineId: PolylineId("$result"), color: Colors.black87, points: points, width: 3);
-    _distance = total / 1000; // m -> km
-    notifyListeners();
+    return Polyline(polylineId: PolylineId("$result"), color: Colors.black87, points: points, width: 3);
   }
-
-  @override
-  String toString() {
-    return 'MapModel{start: $_start, destination: $_destination, polyline: $_polyline, distance: $_distance}';
+  
+  Future<double> _calcDistance(List<LatLng> points) async {
+    double total = 0.0;
+    for (int i=0; i < points.length - 1; ++i) {
+      total += await Locator.distanceBetween(Coordinates.fromLatLng(points[i]), Coordinates.fromLatLng(points[i+1]));
+    }
+    return total / 1000; // m -> km
   }
 }
