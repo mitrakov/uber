@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uber/mapmodel.dart';
 import 'package:uber/screens/main/widgets/addressheader.dart';
+import 'package:uber/screens/main/widgets/maindrawer.dart';
 import 'package:uber/screens/main/widgets/mapwidget.dart';
 import 'package:uber/screens/main/widgets/mostrecent.dart';
 
@@ -12,6 +13,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawer(),
       body: Stack(
         children: <Widget>[
           MapWidget((coords) {
@@ -22,7 +24,9 @@ class MainScreen extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.only(left: 5, top: 20),
-              child: IconButton(icon: Icon(Icons.menu, size: 28), onPressed: () => print("Show menu stub")),
+              child: Builder(
+                builder: (context1) => IconButton(icon: Icon(Icons.menu, size: 28), onPressed: () => Scaffold.of(context1).openDrawer()),
+              ),
             ),
           ),
           Center(
