@@ -27,31 +27,31 @@ class MainDrawer extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text("Order history"),
-                  onTap: () => Navigator.of(context).pushNamed("/history"),
+                  onTap: () => Navigator.pushNamed(context, "/history"),
                 ),
                 ListTile(
                   title: Text("Payment methods"),
-                  onTap: () => Navigator.of(context).pushNamed("/payment"),
+                  onTap: () => Navigator.pushNamed(context, "/payment"),
                 ),
                 ListTile(
                   title: Text("My addresses"),
-                  onTap: () => Navigator.of(context).pushNamed("/myaddress"),
+                  onTap: () => Navigator.pushNamed(context, "/myaddress"),
                 ),
                 ListTile(
                   title: Text("Promo code"),
-                  onTap: () => Navigator.of(context).pushNamed("/promo"),
+                  onTap: () => Navigator.pushNamed(context, "/promo"),
                 ),
                 ListTile(
                   title: Text("Settings"),
-                  onTap: () => Navigator.of(context).pushNamed("/settings"),
+                  onTap: () => Navigator.pushNamed(context, "/settings"),
                 ),
                 ListTile(
                   title: Text("Support"),
-                  onTap: () => Navigator.of(context).pushNamed("/support"),
+                  onTap: () => Navigator.pushNamed(context, "/support"),
                 ),
                 ListTile(
                   title: Text("Info"),
-                  onTap: () => Navigator.of(context).pushNamed("/info"),
+                  onTap: () => Navigator.pushNamed(context, "/info"),
                 ),
               ],
             ),

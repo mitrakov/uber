@@ -16,10 +16,7 @@ class MainScreen extends StatelessWidget {
       drawer: MainDrawer(),
       body: Stack(
         children: <Widget>[
-          MapWidget((coords) {
-            if (model.destination == null) // if destination is null, camera move will set start position
-              model.start = coords;
-          }),
+          MapWidget((coords) {model.start = coords;}),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(

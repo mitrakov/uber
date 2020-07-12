@@ -4,6 +4,7 @@ import 'package:uber/mapmodel.dart';
 import 'package:uber/screens/history/history.dart';
 import 'package:uber/screens/info/info.dart';
 import 'package:uber/screens/main/mainscreen.dart';
+import 'package:uber/screens/maproute/maproutescreen.dart';
 import 'package:uber/screens/myaddress/myaddress.dart';
 import 'package:uber/screens/payment/payments.dart';
 import 'package:uber/screens/promo/promo.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/main": (context1) => MainScreen(_model),
           "/route": (context1) => RouteScreen(),
+          "/maproute": (context1) => MapRouteScreen(),
           "/history": (context1) => HistoryScreen(),
           "/payment": (context1) => PaymentsScreen(),
           "/myaddress": (context1) => MyAddressesScreen(),

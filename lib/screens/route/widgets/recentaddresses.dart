@@ -14,14 +14,14 @@ class RecentAddresses extends StatelessWidget {
           data.insert(0, model.predictAddress);
         return ListView.builder(
           itemCount: data.length,
-          itemBuilder: (context3, i) {
+          itemBuilder: (context2, i) {
             return ListTile(
               leading: Icon(Icons.schedule),
               title: Text(data[i].addr),
               subtitle: Text(data[i].city),
               onTap: () async {
                 model.destination = await Locator.fromAddress(data[i].toShortString());
-                Navigator.of(context3).pop();
+                Navigator.pushNamed(context2, "/maproute");
               },
             );
           },

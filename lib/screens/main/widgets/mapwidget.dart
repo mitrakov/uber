@@ -25,7 +25,6 @@ class MapWidgetState extends State<MapWidget> {
     return ScopedModelDescendant<MapModel>(
       builder: (context1, child, model) {
         print("Rebuilding map with $model");
-        checkModel(model);
         return GoogleMap(
           initialCameraPosition: _initPos,
           myLocationEnabled: true,
@@ -39,20 +38,10 @@ class MapWidgetState extends State<MapWidget> {
           onMapCreated: (GoogleMapController controller) {
             _mapCtrl = controller;
             moveToCurrentLocation(model);
-          },
-          markers: model.markers,
-          polylines: model.polylines,
+          }
         );
       }
     );
-  }
-
-  void checkModel(MapModel model) {
-    if (model.start != null) {
-      if (model.destination != null) {
-        zoomCameraToAccommodateCoords(model.start, model.destination);
-      } else moveToCoords(model.start);
-    }
   }
 
   void moveToCurrentLocation(MapModel model) async {
@@ -60,17 +49,5 @@ class MapWidgetState extends State<MapWidget> {
     print(coords);
     final position = CameraPosition(target: coords.toLatLng(), zoom: 18);
     _mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));
-  }
-
-  void moveToCoords(Coordinates coords) {
-    final position = CameraPosition(target: coords.toLatLng(), zoom: 18);
-    _mapCtrl.animateCamera(CameraUpdate.newCameraPosition(position));
-  }
-
-  void zoomCameraToAccommodateCoords(Coordinates c1, Coordinates c2) {
-    final sw = c1.latitude <= c2.latitude ? c1 : c2;
-    final ne = c1.latitude <= c2.latitude ? c2 : c1;
-    final newBounds = LatLngBounds(northeast: ne.toLatLng(), southwest: sw.toLatLng());
-    _mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 100));
   }
 }

@@ -20,7 +20,7 @@ class AddressHeader extends StatelessWidget {
               ],
             ),
           ),
-          onPressed: () => Navigator.of(context).pushNamed("/route"),
+          onPressed: () => Navigator.pushNamed(context1, "/route"),
         );
       },
     );

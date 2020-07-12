@@ -25,11 +25,11 @@ class MapModel extends Model {
   Coordinates get destination => _destination;
   set start(Coordinates value) {
     _start = value;
-    _updateModel(_start, _destination).whenComplete(notifyListeners);
+    Locator.toAddress(_start).then((addr) => _startAddress = addr).whenComplete(notifyListeners);
   }
   set destination(Coordinates value) {
     _destination = value;
-    _updateModel(_start, _destination).whenComplete(notifyListeners);
+    _updateAll().whenComplete(notifyListeners);
   }
 
   // address getters/setters
@@ -70,21 +70,14 @@ class MapModel extends Model {
       _storage = await SharedPreferences.getInstance();
   }
 
-  Future<void> _updateModel(Coordinates c1, Coordinates c2) async {
-    if (c1 != null) {
-      _startAddress = await Locator.toAddress(c1);
-    }
-    if (c2 != null) {
-      _destinationAddress = await Locator.toAddress(c2);
-      _addRecentAddress(_destinationAddress);
-    }
-    if (c1 != null && c2 != null) {
-      _predictAddress = null;
-      _startMarker = _createMarker(c1);
-      _destinationMarker = _createMarker(c2);
-      _polyline = await _buildPolyline(c1, c2);
-      _distance = await _calcDistance(_polyline.points);
-    }
+  Future<void> _updateAll() async {
+    _destinationAddress = await Locator.toAddress(_destination);
+    _addRecentAddress(_destinationAddress);
+    _predictAddress = null;
+    _startMarker = _createMarker(_start);
+    _destinationMarker = _createMarker(_destination);
+    _polyline = await _buildPolyline(_start, _destination);
+    _distance = await _calcDistance(_polyline.points);
   }
 
   Marker _createMarker(Coordinates c) => Marker(markerId: MarkerId("$c"), position: c.toLatLng());
