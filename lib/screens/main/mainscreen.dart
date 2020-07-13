@@ -4,6 +4,7 @@ import 'package:uber/screens/main/widgets/addressheader.dart';
 import 'package:uber/screens/main/widgets/maindrawer.dart';
 import 'package:uber/screens/main/widgets/mapwidget.dart';
 import 'package:uber/screens/main/widgets/mostrecent.dart';
+import 'package:uber/screens/main/widgets/mylocationwidget.dart';
 import 'package:uber/screens/main/widgets/positionwidget.dart';
 
 class MainScreen extends StatelessWidget {
@@ -32,16 +33,7 @@ class MainScreen extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(right: 10, bottom: 160),
-              child: ClipOval(
-                  child: Material(
-                    color: Colors.white,
-                    child: InkWell(
-                      splashColor: Colors.white,
-                      child: SizedBox(width: 32, height: 32, child: Icon(Icons.near_me, size: 22)),
-                      onTap: () => print(""),
-                    ),
-                  )
-              ),
+              child: MyLocationWidget(),
             ),
           ),
           Align(
