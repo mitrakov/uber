@@ -4,6 +4,7 @@ import 'package:uber/screens/main/widgets/addressheader.dart';
 import 'package:uber/screens/main/widgets/maindrawer.dart';
 import 'package:uber/screens/main/widgets/mapwidget.dart';
 import 'package:uber/screens/main/widgets/mostrecent.dart';
+import 'package:uber/screens/main/widgets/positionwidget.dart';
 
 class MainScreen extends StatelessWidget {
   final MapModel model;
@@ -26,9 +27,7 @@ class MainScreen extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: Icon(Icons.arrow_drop_down_circle, size: 48),
-          ),
+          Center(child: PositionWidget()),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
