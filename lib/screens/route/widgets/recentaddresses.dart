@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:uber/address.dart';
 import 'package:uber/locator.dart';
 import 'package:uber/mapmodel.dart';
+import 'package:uber/redux/appstate.dart';
+import 'package:uber/redux/thunks.dart';
 
 class RecentAddresses extends StatelessWidget {
   @override
@@ -19,14 +22,17 @@ class RecentAddresses extends StatelessWidget {
               leading: Icon(Icons.schedule),
               title: Text(data[i].addr),
               subtitle: Text(data[i].city),
-              onTap: () async {
-                model.destination = await Locator.fromAddress(data[i].toShortString());
-                Navigator.pushNamed(context2, "/maproute");
-              },
+              onTap: () => buildRoute(context2, model, data[i]),
             );
           },
         );
       }
     );
+  }
+
+  void buildRoute(BuildContext context, MapModel model, Address address) async {
+    model.destination = await Locator.fromAddress(address.toShortString());
+    StoreProvider.of<AppState>(context).dispatch(Thunk.fetchPrices(model.start, model.destination));
+    Navigator.pushNamed(context, "/maproute");
   }
 }
