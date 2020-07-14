@@ -8,8 +8,8 @@ class Ajax {
   static Future<Map<String, double>> fetchPrices(Coordinates c1, Coordinates c2) async {
     final response = await post("$baseUrl/tariff", body: json.encode(c1.toPlain(c2).toJson()));
     if (response.statusCode == 200) {
-      final prices = json.decode(response.body);
-      return prices.map((key, value) => MapEntry(key, value as num));
+      final Map<String, dynamic> prices = json.decode(response.body);
+      return prices.map((key, value) => MapEntry(key, value as double));
     } else throw Exception("Failed to fetch prices: ${response.statusCode}: ${response.body}");
   }
 }
