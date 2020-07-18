@@ -37,7 +37,12 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          Center(child: PositionWidget()),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 70),
+              child: PositionWidget(),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
