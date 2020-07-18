@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(primarySwatch: Colors.blue),
           initialRoute: "/main",
           routes: {
-            "/main": (context1) => MainScreen(_model),
+            "/main": (context1) => MainScreen(),
             "/route": (context1) => RouteScreen(),
             "/maproute": (context1) => MapRouteScreen(),
             "/history": (context1) => HistoryScreen(),

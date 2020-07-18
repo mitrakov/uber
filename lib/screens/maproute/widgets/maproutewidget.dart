@@ -5,12 +5,11 @@ import 'package:uber/coordinates.dart';
 import 'package:uber/mapmodel.dart';
 
 class MapRouteWidget extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => MapRouteWidgetState();
+  State<StatefulWidget> createState() => _MapRouteWidgetState();
 }
 
-class MapRouteWidgetState extends State<MapRouteWidget> {
-  GoogleMapController _mapCtrl;
+class _MapRouteWidgetState extends State<MapRouteWidget> {
+  GoogleMapController mapCtrl;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class MapRouteWidgetState extends State<MapRouteWidget> {
           zoomGesturesEnabled: true,
           zoomControlsEnabled: false,
           onMapCreated: (GoogleMapController controller) {
-            _mapCtrl = controller;
+            mapCtrl = controller;
             Future.delayed(Duration(milliseconds: 1000), () => zoomCameraToAccommodateCoords(model.start, model.destination));
           },
           markers: model.markers,
@@ -41,6 +40,6 @@ class MapRouteWidgetState extends State<MapRouteWidget> {
     final sw = c1.latitude <= c2.latitude ? c1 : c2;
     final ne = c1.latitude <= c2.latitude ? c2 : c1;
     final newBounds = LatLngBounds(northeast: ne.toLatLng(), southwest: sw.toLatLng());
-    _mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 100));
+    mapCtrl.animateCamera(CameraUpdate.newLatLngBounds(newBounds, 100));
   }
 }
