@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uber/screens/maproute/widgets/request/addressresult.dart';
 import 'package:uber/screens/maproute/widgets/request/paymentrow.dart';
-import 'package:uber/screens/maproute/widgets/request/pricechooser.dart';
+import 'package:uber/screens/maproute/widgets/request/price/pricechooser.dart';
 
 class RequestWidget extends StatelessWidget {
   @override

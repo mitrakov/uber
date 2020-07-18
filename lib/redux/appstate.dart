@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class AppState {
-  final Map<String, double> prices;
+  final Map<String, int> prices;
   final String lastError;
 
   AppState(this.prices, this.lastError) {

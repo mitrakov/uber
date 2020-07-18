@@ -1,5 +1,5 @@
 class PricesFetchedAction {
-  final Map<String, double> prices;
+  final Map<String, int> prices;
   PricesFetchedAction(this.prices);
 }
 
