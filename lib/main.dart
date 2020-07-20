@@ -51,3 +51,15 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+/*
+Price chooser:
+  align
+  selected items
+Payment Row
+Request UberX button
+Textboxes of RouteScreen
+Recent places (main screen)
+Round button with shadow
+Back button from RouteScreen
+*/

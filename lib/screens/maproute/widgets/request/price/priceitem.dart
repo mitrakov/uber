@@ -11,6 +11,7 @@ class PriceItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Image.asset("assets/$sku.png"),
           Text(sku),

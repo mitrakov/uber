@@ -22,7 +22,7 @@ class PriceChooser extends StatelessWidget {
                 itemBuilder: (context3, i) {
                   final sku = state.prices.keys.toList()[i];
                   final price = state.prices.values.toList()[i];
-                  return PriceItem(sku, price);
+                  return Align(alignment: Alignment.bottomCenter, child: PriceItem(sku, price));
                 },
               ),
             );
