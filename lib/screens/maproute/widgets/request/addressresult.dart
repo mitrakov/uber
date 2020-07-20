@@ -31,7 +31,7 @@ class AddressResult extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(top: 20, bottom: 11),
+                      padding: EdgeInsets.only(top: 18, bottom: 10),
                       child: Text(model.startAddress?.toShortString(), style: TextStyle(fontSize: 17, color: Colors.black)),
                     ),
                     Divider(),
@@ -39,7 +39,7 @@ class AddressResult extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 13, bottom: 13),
+                            padding: EdgeInsets.only(top: 13, bottom: 12),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,

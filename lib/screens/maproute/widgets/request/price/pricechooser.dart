@@ -15,7 +15,7 @@ class PriceChooser extends StatelessWidget {
           converter: (store) => store.state,
           builder: (context2, state) {
             return Container(
-              height: 115,
+              height: 110,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: state.prices.length,

@@ -9,7 +9,7 @@ class MapRouteScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 47,
+            flex: 295,
             child: Stack(
               children: <Widget>[
                 MapRouteWidget(),
@@ -29,7 +29,7 @@ class MapRouteScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 53,
+            flex: 342,
             child: RequestWidget(),
           ),
         ],

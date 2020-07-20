@@ -9,13 +9,16 @@ class PriceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 16, right: 16),
+      padding: EdgeInsets.only(left: 15, right: 15, bottom: 2),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Image.asset("assets/$sku.png"),
-          Text(sku),
-          Text("$price r.", style: TextStyle(fontSize: 20)),
+          Padding(
+            padding: EdgeInsets.only(top: 6, bottom: 2),
+            child: Text(sku, style: TextStyle(fontSize: 12)),
+          ),
+          Text("$price r.", style: TextStyle(fontSize: 18)),
         ],
       ),
     );

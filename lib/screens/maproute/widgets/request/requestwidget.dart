@@ -21,7 +21,7 @@ class RequestWidget extends StatelessWidget {
               width: double.infinity,
               child: RaisedButton(
                 color: Colors.black,
-                child: Text("REQUEST UBERX", style: TextStyle(color: Colors.white)),
+                child: Text("REQUEST UBERX", style: TextStyle(color: Colors.white, fontSize: 16)),
                 onPressed: () => print("REQUEST UBERX"),
               ),
             ),
