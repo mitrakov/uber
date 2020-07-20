@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
 }
 
 /*
+makeIcon -> Joplin
 Price chooser:
   align
   selected items

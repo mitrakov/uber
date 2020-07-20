@@ -18,10 +18,7 @@ class MapRouteScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(left: 5, top: 20),
                     child: Builder(
-                      builder: (context1) => IconButton(
-                        icon: Icon(Icons.arrow_back, size: 28),
-                        onPressed: () => Navigator.popUntil(context, ModalRoute.withName("/main")),
-                      ),
+                      builder: (context1) => makeIcon(Icons.android),
                     ),
                   ),
                 ),
@@ -33,6 +30,26 @@ class MapRouteScreen extends StatelessWidget {
             child: RequestWidget(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget makeIcon(IconData icon) {
+    return Material(
+      color: Colors.lightBlue,
+      shape: CircleBorder(),
+      shadowColor: Colors.red,
+      elevation: 20,
+      child: Ink(
+        decoration: const ShapeDecoration(
+          color: Colors.lightBlue,
+          shape: CircleBorder(),
+        ),
+        child: IconButton(
+          icon: Icon(icon),
+          color: Colors.white,
+          onPressed: () {print("opa");},
+        ),
       ),
     );
   }
