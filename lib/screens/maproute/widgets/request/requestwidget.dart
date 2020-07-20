@@ -7,7 +7,7 @@ class RequestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
       color: Colors.white,
       child: Column(
         children: <Widget>[
@@ -16,12 +16,17 @@ class RequestWidget extends StatelessWidget {
           PriceChooser(),
           Divider(),
           PaymentRow(),
-          RaisedButton(
-            color: Colors.black,
-            child: Text("REQUEST UBERX", style: TextStyle(color: Colors.white)),
-            onPressed: () => print("REQUEST UBERX"),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              child: RaisedButton(
+                color: Colors.black,
+                child: Text("REQUEST UBERX", style: TextStyle(color: Colors.white)),
+                onPressed: () => print("REQUEST UBERX"),
+              ),
+            ),
           ),
-        ],
+        ]
       ),
     );
   }

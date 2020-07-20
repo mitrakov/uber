@@ -6,9 +6,11 @@ class PaymentRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Icon(Icons.payment),
-        Text("Apple Pay"),
-        Text("Comments, options"),
+        Image.asset("assets/apple-pay.png"),
+        Padding(padding: EdgeInsets.only(left: 10), child: Text("Apple Pay")),
+        Expanded(
+          child: Align(alignment: Alignment.centerRight, child: Text("Comments, options")),
+        ),
       ],
     );
   }
