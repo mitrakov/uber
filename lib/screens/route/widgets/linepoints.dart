@@ -5,9 +5,9 @@ class LinePoints extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Icon(Icons.brightness_1),
-        SizedBox(width: 20, height: 20),
-        Icon(Icons.stop),
+        Padding(padding: EdgeInsets.only(bottom: 2), child: Icon(Icons.brightness_1, size: 6, color: Colors.grey),),
+        Container(color: Colors.grey, width: 1.5, height: 30),
+        Icon(Icons.stop, size: 13),
       ],
     );
   }

@@ -16,8 +16,10 @@ class RecentAddresses extends StatelessWidget {
         if (model.predictAddress != null)
           data.insert(0, model.predictAddress);
         return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context2, i) {
+          itemCount: data.length * 2,
+          itemBuilder: (context2, j) {
+            if (j.isOdd) return Divider();
+            final i = j ~/ 2;
             return ListTile(
               leading: Icon(Icons.schedule),
               title: Text(data[i].addr),
