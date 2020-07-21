@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 5, top: 20),
+                padding: EdgeInsets.only(left: 4, top: 18),
                 child: Builder(
                   builder: (context1) => IconButton(icon: Icon(Icons.menu, size: 28), onPressed: () => Scaffold.of(context1).openDrawer()),
                 ),
@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 70, left: 20, right: 20),
+                padding: EdgeInsets.only(bottom: 27, left: 20, right: 20),
                 child: MostRecent(),
               ),
             ),
