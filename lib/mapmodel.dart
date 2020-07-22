@@ -55,6 +55,7 @@ class MapModel extends Model {
   }
 
   List<Address> getRecentAddresses() {
+    if (_storage == null) return [];
     if (_storage.containsKey("recentAddresses"))
       return _storage.getStringList("recentAddresses").map((s) => Address.fromStorageString(s)).toList();
     return [];

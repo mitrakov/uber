@@ -15,7 +15,7 @@ class MostRecentItem extends StatelessWidget {
         Container(
           width: 100,
           padding: EdgeInsets.only(top: 18),
-          child: Text(address.toShortString(), softWrap: true, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+          child: Text(address?.toShortString() ?? "", softWrap: true, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
         ),
       ],
     );
