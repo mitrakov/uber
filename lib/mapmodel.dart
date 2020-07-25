@@ -83,7 +83,7 @@ class MapModel extends Model {
 
   Future<Marker> _createMarker(Coordinates c, String startOrEnd) async {
     final icon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), "assets/$startOrEnd-point.png");
-    return Marker(markerId: MarkerId("$c"), position: c.toLatLng(), icon: icon);
+    return Marker(markerId: MarkerId("$c"), position: c.toLatLng(), icon: icon, infoWindow: InfoWindow(title: "8", snippet: "min"));
   }
 
   Future<Polyline> _buildPolyline(Coordinates c1, Coordinates c2) async {
