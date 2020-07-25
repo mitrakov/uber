@@ -5,7 +5,14 @@ import 'package:uber/mapmodel.dart';
 import 'package:uber/redux/appstate.dart';
 import 'package:uber/screens/maproute/widgets/request/price/priceitem.dart';
 
-class PriceChooser extends StatelessWidget {
+class PriceChooser extends StatefulWidget {
+  @override
+  _PriceChooserState createState() => _PriceChooserState();
+}
+
+class _PriceChooserState extends State<PriceChooser> {
+  String selectedSku = "Select";
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MapModel>(
@@ -22,7 +29,9 @@ class PriceChooser extends StatelessWidget {
                 itemBuilder: (context3, i) {
                   final sku = state.prices.keys.toList()[i];
                   final price = state.prices.values.toList()[i];
-                  return Align(alignment: Alignment.bottomCenter, child: PriceItem(sku, price));
+                  return Align(alignment: Alignment.bottomCenter, child: PriceItem(sku, price, sku == selectedSku, onTap: (sku) {
+                    setState(() => selectedSku = sku);
+                  }));
                 },
               ),
             );

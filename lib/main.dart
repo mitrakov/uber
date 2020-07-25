@@ -53,10 +53,7 @@ class MyApp extends StatelessWidget {
 }
 
 /*
-Price chooser: selected items
-Markers for GoogleMap
-Long Text cutter
-Choose a car logic
+Price chooser: change button
 Request uber: onTap
 Icons
 */
