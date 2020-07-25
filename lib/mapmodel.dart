@@ -75,13 +75,16 @@ class MapModel extends Model {
     _destinationAddress = await Locator.toAddress(_destination);
     _addRecentAddress(_destinationAddress);
     _predictAddress = null;
-    _startMarker = _createMarker(_start);
-    _destinationMarker = _createMarker(_destination);
+    _startMarker = await _createMarker(_start, "start");
+    _destinationMarker = await _createMarker(_destination, "end");
     _polyline = await _buildPolyline(_start, _destination);
     _distance = await _calcDistance(_polyline.points);
   }
 
-  Marker _createMarker(Coordinates c) => Marker(markerId: MarkerId("$c"), position: c.toLatLng());
+  Future<Marker> _createMarker(Coordinates c, String startOrEnd) async {
+    final icon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), "assets/$startOrEnd-point.png");
+    return Marker(markerId: MarkerId("$c"), position: c.toLatLng(), icon: icon);
+  }
 
   Future<Polyline> _buildPolyline(Coordinates c1, Coordinates c2) async {
     final PolylinePoints polylinePoints = PolylinePoints();
