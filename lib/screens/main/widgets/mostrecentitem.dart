@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:uber/address.dart';
 
 class MostRecentItem extends StatelessWidget {
@@ -11,17 +12,22 @@ class MostRecentItem extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        drawIcon(Icons.access_time),
+        drawIcon(),
         Container(
           width: 100,
           padding: EdgeInsets.only(top: 18),
-          child: Text(address?.toShortString() ?? "", softWrap: true, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+          child: Text(address?.toShortString() ?? "",
+              softWrap: true,
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
         ),
       ],
     );
   }
 
-  Widget drawIcon(IconData icon) {
+  Widget drawIcon() {
     return Material(
       color: Colors.lightBlue,
       shape: CircleBorder(),
@@ -36,14 +42,12 @@ class MostRecentItem extends StatelessWidget {
         ),
         child: IconButton(
           padding: EdgeInsets.all(0),
-          iconSize: 22,
-          icon: Icon(icon),
+          icon: Icon(MdiIcons.clockTimeThreeOutline, size: 26),
           color: Colors.black,
           onPressed: () {},
         ),
       ),
     );
   }
-
 }
 

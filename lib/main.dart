@@ -53,14 +53,10 @@ class MyApp extends StatelessWidget {
 }
 
 /*
-makeIcon -> Joplin
-Price chooser:
-  align
-  selected items
-Payment Row
-Request UberX button
-Textboxes of RouteScreen
-Recent places (main screen)
-Round button with shadow
-Back button from RouteScreen
+Price chooser: selected items
+Markers for GoogleMap
+Long Text cutter
+Choose a car logic
+Request uber: onTap
+Icons
 */

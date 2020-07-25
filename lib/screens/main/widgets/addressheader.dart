@@ -22,7 +22,11 @@ class AddressHeader extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(left: 25),
-                  child: Text("From: ${model.startAddress?.toShortString() ?? ""}", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  child: Text("From: ${model.startAddress?.toShortString() ?? ""}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
                 ),
                 Row(
                   children: <Widget>[
@@ -30,7 +34,11 @@ class AddressHeader extends StatelessWidget {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(left: 12),
-                        child: Text(model.destinationAddress?.toShortString() ?? "Where to?", style: TextStyle(fontSize: 18)),
+                        child: Text(model.destinationAddress?.toShortString() ?? "Where to?",
+                          style: TextStyle(fontSize: 18),
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
                     )
                   ],

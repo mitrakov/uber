@@ -32,7 +32,11 @@ class AddressResult extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(top: 18, bottom: 10),
-                      child: Text(model.startAddress?.toShortString() ?? "", style: TextStyle(fontSize: 17, color: Colors.black)),
+                      child: Text(model.startAddress?.toShortString() ?? "",
+                        style: TextStyle(fontSize: 17, color: Colors.black),
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                      ),
                     ),
                     Divider(),
                     Row(
@@ -44,7 +48,13 @@ class AddressResult extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,
                               children: <Widget>[
-                                Text(model.destinationAddress?.toShortString() ?? "", style: TextStyle(fontSize: 17, color: Colors.black)),
+                                Expanded(
+                                  child: Text(model.destinationAddress?.toShortString() ?? "",
+                                    style: TextStyle(fontSize: 17, color: Colors.black),
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                  ),
+                                ),
                                 Text(" • 14 min", style: TextStyle(color: Colors.grey)),
                               ]
                             )
