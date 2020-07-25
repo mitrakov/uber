@@ -18,7 +18,7 @@ class _MapRouteWidgetState extends State<MapRouteWidget> {
         print("Rebuilding route map with");
         return GoogleMap(
           initialCameraPosition: CameraPosition(target: model.start.toLatLng(), zoom: 15.4746),
-          myLocationEnabled: true,
+          myLocationEnabled: false,
           myLocationButtonEnabled: false,
           mapType: MapType.normal,
           zoomGesturesEnabled: true,
