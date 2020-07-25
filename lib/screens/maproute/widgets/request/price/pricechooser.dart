@@ -11,7 +11,7 @@ class PriceChooser extends StatefulWidget {
 }
 
 class _PriceChooserState extends State<PriceChooser> {
-  String selectedSku = "Select";
+  String selectedSku = "UberX";
 
   @override
   Widget build(BuildContext context) {

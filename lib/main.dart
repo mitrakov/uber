@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
 }
 
 /*
+Recent items overflow
 Price chooser: change button
 Request uber: onTap
 Icons
